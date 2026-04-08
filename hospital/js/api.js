@@ -1,7 +1,7 @@
 // js/api.js — Frontend API client for MediCore
 // Replace localStorage calls with real Atlas-backed API
 
-const API_BASE = 'http://localhost:5000/api'; // Change to your deployed URL in production
+const API_BASE = 'https://medicore-hvkf.onrender.com'; // Change to your deployed URL in production
 
 // ── Token helpers ─────────────────────────────────────────
 const getToken = () => sessionStorage.getItem('medicore_token');
