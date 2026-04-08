@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Services — MediCore Hospital</title>
+  <link rel="stylesheet" href="../css/main.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    .services-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.8rem; }
+    .service-card { background: white; border-radius: var(--radius); padding: 2rem; border: 1px solid var(--light-gray); transition: all 0.3s; }
+    .service-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: var(--gold); }
+    .sv-icon { width: 64px; height: 64px; border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; margin-bottom: 1.2rem; }
+    .service-card h3 { color: var(--navy); margin-bottom: 0.8rem; }
+    .service-card ul { list-style: none; }
+    .service-card li { padding: 0.3rem 0; font-size: 0.87rem; color: var(--gray); display: flex; align-items: center; gap: 0.5rem; }
+    .service-card li::before { content: '✓'; color: var(--gold); font-weight: 700; }
+    .emergency-banner { background: linear-gradient(135deg,#c0392b,#922b21); color: white; border-radius: var(--radius); padding: 2.5rem; text-align: center; margin-top: 3rem; }
+    .emergency-banner h2 { color: white; font-size: 2.2rem; }
+    .emergency-banner p { color: rgba(255,255,255,0.8); margin: 0.8rem 0 1.5rem; }
+    .emg-btn { display: inline-block; background: white; color: #c0392b; padding: 0.85rem 2.5rem; border-radius: 10px; font-weight: 700; font-size: 1.1rem; }
+  </style>
+</head>
+<body>
+<nav class="navbar scrolled">
+  <div class="nav-inner">
+    <a href="../index.html" class="logo"><span class="logo-icon"><i class="fas fa-heartbeat"></i></span><span>Medi<strong>Core</strong></span></a>
+    <ul class="nav-links">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="appointment.html">Book Appointment</a></li>
+      <li><a href="doctors.html">Doctors</a></li>
+      <li><a href="services.html" class="active">Services</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-actions"><a href="appointment.html" class="btn-primary">Book Now</a></div>
+  </div>
+</nav>
+<div class="page-header"><h1>Our <em>Services</em></h1><p>Comprehensive healthcare services delivered with excellence</p></div>
+<section class="section">
+  <div class="container">
+    <div class="services-grid">
+      <div class="service-card"><div class="sv-icon" style="background:rgba(231,76,60,0.1);color:#e74c3c"><i class="fas fa-ambulance"></i></div><h3>Emergency Care</h3><ul><li>24/7 Emergency Response</li><li>Trauma & Critical Care</li><li>ICU & CCU</li><li>Ambulance Services</li><li>Resuscitation Unit</li></ul></div>
+      <div class="service-card"><div class="sv-icon" style="background:rgba(52,152,219,0.1);color:#3498db"><i class="fas fa-procedures"></i></div><h3>Surgery & OT</h3><ul><li>Laparoscopic Surgery</li><li>Cardiac Surgery</li><li>Orthopaedic Surgery</li><li>Neuro Surgery</li><li>Robotic-Assisted Surgery</li></ul></div>
+      <div class="service-card"><div class="sv-icon" style="background:rgba(155,89,182,0.1);color:#9b59b6"><i class="fas fa-x-ray"></i></div><h3>Diagnostics</h3><ul><li>MRI & CT Scan</li><li>X-Ray & Ultrasound</li><li>Pathology Lab</li><li>ECG & Echo</li><li>PET Scan</li></ul></div>
+      <div class="service-card"><div class="sv-icon" style="background:rgba(39,174,96,0.1);color:#27ae60"><i class="fas fa-baby"></i></div><h3>Maternity</h3><ul><li>Prenatal & Postnatal Care</li><li>Normal & C-Section Delivery</li><li>NICU</li><li>Fertility Treatment</li><li>Gynae OPD</li></ul></div>
+      <div class="service-card"><div class="sv-icon" style="background:rgba(241,196,15,0.1);color:#f39c12"><i class="fas fa-heartbeat"></i></div><h3>Cardiology</h3><ul><li>Angioplasty & Bypass</li><li>Pacemaker Implant</li><li>Heart Failure Management</li><li>Cardiac Rehab</li><li>Preventive Cardiology</li></ul></div>
+      <div class="service-card"><div class="sv-icon" style="background:rgba(230,126,34,0.1);color:#e67e22"><i class="fas fa-child"></i></div><h3>Physiotherapy</h3><ul><li>Ortho Physiotherapy</li><li>Neuro Rehab</li><li>Sports Injury Rehab</li><li>Post-Surgery Recovery</li><li>Pain Management</li></ul></div>
+    </div>
+    <div class="emergency-banner">
+      <div style="font-size:2.5rem;margin-bottom:0.8rem">🚨</div>
+      <h2>24/7 Emergency Services</h2>
+      <p>Our emergency team is always ready to respond. Don't hesitate — call us immediately.</p>
+      <a href="tel:+912091990000" class="emg-btn"><i class="fas fa-phone-alt"></i> Call Emergency: +91 20 9999 0000</a>
+    </div>
+  </div>
+</section>
+<footer class="footer">
+  <div class="footer-inner" style="grid-template-columns:1fr 1fr 1fr">
+    <div class="footer-brand"><a href="../index.html" class="logo"><span class="logo-icon"><i class="fas fa-heartbeat"></i></span><span>Medi<strong>Core</strong></span></a><p style="margin-top:0.8rem">Comprehensive healthcare under one roof.</p></div>
+    <div class="footer-links"><h4>Quick Links</h4><ul><li><a href="appointment.html">Book Appointment</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+    <div class="footer-contact"><h4>Emergency</h4><p><i class="fas fa-phone"></i> +91 20 9999 0000</p><p><i class="fas fa-clock"></i> 24/7 Available</p></div>
+  </div>
+  <div class="footer-bottom"><p>© 2026 MediCore Hospital</p></div>
+</footer>
+</body>
+</html>

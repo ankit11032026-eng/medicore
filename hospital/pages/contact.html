@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contact Us — MediCore Hospital</title>
+  <link rel="stylesheet" href="../css/main.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; }
+    .contact-info-card { background: var(--navy); color: white; border-radius: var(--radius); padding: 2.5rem; }
+    .contact-info-card h2 { color: white; margin-bottom: 1rem; }
+    .contact-info-card p { color: rgba(255,255,255,0.7); margin-bottom: 2rem; }
+    .ci-item { display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1.5rem; }
+    .ci-icon { width: 44px; height: 44px; background: rgba(201,168,76,0.15); border-radius: 10px;
+      display: flex; align-items: center; justify-content: center; color: var(--gold); flex-shrink: 0; }
+    .ci-text strong { display: block; color: white; margin-bottom: 0.2rem; }
+    .ci-text span { color: rgba(255,255,255,0.6); font-size: 0.88rem; }
+    .contact-form-card { background: white; border-radius: var(--radius); padding: 2.5rem; box-shadow: var(--shadow); }
+  </style>
+</head>
+<body>
+<nav class="navbar scrolled">
+  <div class="nav-inner">
+    <a href="../index.html" class="logo"><span class="logo-icon"><i class="fas fa-heartbeat"></i></span><span>Medi<strong>Core</strong></span></a>
+    <ul class="nav-links">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="appointment.html">Book Appointment</a></li>
+      <li><a href="doctors.html">Doctors</a></li>
+      <li><a href="contact.html" class="active">Contact</a></li>
+    </ul>
+    <div class="nav-actions"><a href="appointment.html" class="btn-primary">Book Now</a></div>
+  </div>
+</nav>
+<div class="page-header"><h1>Contact <em>Us</em></h1><p>We're here to help. Reach out anytime.</p></div>
+<section class="section">
+  <div class="container">
+    <div class="contact-grid">
+      <div class="contact-info-card">
+        <h2>Get in <em>Touch</em></h2>
+        <p>Our team is available to assist you with appointments, queries, and any healthcare needs.</p>
+        <div class="ci-item"><div class="ci-icon"><i class="fas fa-map-marker-alt"></i></div><div class="ci-text"><strong>Address</strong><span>42 Medical Avenue, Shivajinagar<br/>Pune, Maharashtra 411001</span></div></div>
+        <div class="ci-item"><div class="ci-icon"><i class="fas fa-phone"></i></div><div class="ci-text"><strong>Phone</strong><span>+91 20 1234 5678 (OPD)<br/>+91 20 9999 0000 (Emergency)</span></div></div>
+        <div class="ci-item"><div class="ci-icon"><i class="fas fa-envelope"></i></div><div class="ci-text"><strong>Email</strong><span>care@medicore.in<br/>appointments@medicore.in</span></div></div>
+        <div class="ci-item"><div class="ci-icon"><i class="fas fa-clock"></i></div><div class="ci-text"><strong>Working Hours</strong><span>OPD: 8:00 AM – 8:00 PM<br/>Emergency: 24 × 7</span></div></div>
+      </div>
+      <div class="contact-form-card">
+        <h3 style="margin-bottom:0.5rem;color:var(--navy)">Send a Message</h3>
+        <p style="margin-bottom:1.5rem">We'll get back to you within 24 hours</p>
+        <div id="contact-success" style="display:none" class="alert alert-success"><i class="fas fa-check-circle"></i> Message sent! We'll contact you soon.</div>
+        <div class="form-grid-2">
+          <div class="form-group"><label>Name</label><input type="text" id="c-name" placeholder="Your full name"/></div>
+          <div class="form-group"><label>Phone</label><input type="tel" id="c-phone" placeholder="+91 xxxxx xxxxx"/></div>
+        </div>
+        <div class="form-group"><label>Email</label><input type="email" id="c-email" placeholder="your@email.com"/></div>
+        <div class="form-group"><label>Subject</label>
+          <select id="c-subject">
+            <option>Appointment Query</option>
+            <option>Medical Records</option>
+            <option>Billing / Insurance</option>
+            <option>Feedback</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Message</label><textarea rows="4" id="c-msg" placeholder="Type your message here..."></textarea></div>
+        <button class="btn-primary btn-full" style="cursor:pointer" onclick="sendMsg()">Send Message <i class="fas fa-paper-plane"></i></button>
+      </div>
+    </div>
+  </div>
+</section>
+<footer class="footer">
+  <div class="footer-inner" style="grid-template-columns:1fr 1fr 1fr">
+    <div class="footer-brand"><a href="../index.html" class="logo"><span class="logo-icon"><i class="fas fa-heartbeat"></i></span><span>Medi<strong>Core</strong></span></a><p style="margin-top:0.8rem">Your trusted healthcare partner.</p></div>
+    <div class="footer-links"><h4>Quick Links</h4><ul><li><a href="appointment.html">Book Appointment</a></li><li><a href="doctors.html">Doctors</a></li></ul></div>
+    <div class="footer-contact"><h4>Emergency</h4><p><i class="fas fa-phone"></i> +91 20 9999 0000</p><p><i class="fas fa-clock"></i> 24/7 Available</p></div>
+  </div>
+  <div class="footer-bottom"><p>© 2026 MediCore Hospital</p></div>
+</footer>
+<script>
+function sendMsg(){ document.getElementById('contact-success').style.display='flex'; ['c-name','c-phone','c-email','c-msg'].forEach(id=>document.getElementById(id).value=''); }
+</script>
+</body>
+</html>

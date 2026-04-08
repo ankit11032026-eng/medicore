@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MediCore Hospital — Premium Healthcare</title>
+  <link rel="stylesheet" href="css/main.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="logo">
+      <span class="logo-icon"><i class="fas fa-heartbeat"></i></span>
+      <span>Medi<strong>Core</strong></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html" class="active">Home</a></li>
+      <li><a href="pages/appointment.html">Book Appointment</a></li>
+      <li><a href="pages/doctors.html">Doctors</a></li>
+      <li><a href="pages/services.html">Services</a></li>
+      <li><a href="pages/contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="pages/patient-login.html" class="btn-outline">Patient Login</a>
+      <a href="pages/appointment.html" class="btn-primary">Book Now</a>
+    </div>
+    <button class="hamburger" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-badge"><i class="fas fa-award"></i> Accredited Excellence in Care</div>
+    <h1>Your Health,<br/><em>Our Priority</em></h1>
+    <p>World-class healthcare at your fingertips. Book appointments with specialist doctors in seconds, anytime, anywhere.</p>
+    <div class="hero-actions">
+      <a href="pages/appointment.html" class="btn-hero-primary">Book Appointment <i class="fas fa-arrow-right"></i></a>
+      <a href="pages/doctors.html" class="btn-hero-secondary">Our Specialists</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><strong>500+</strong><span>Doctors</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat"><strong>1M+</strong><span>Patients</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat"><strong>98%</strong><span>Satisfaction</span></div>
+    </div>
+  </div>
+  <div class="hero-image">
+    <div class="hero-card">
+      <div class="hc-top"><i class="fas fa-calendar-check"></i> Upcoming Appointment</div>
+      <div class="hc-doc"><div class="hc-avatar">DR</div><div><strong>Dr. Raj Mehta</strong><span>Cardiologist</span></div></div>
+      <div class="hc-time"><i class="fas fa-clock"></i> Today, 2:30 PM</div>
+      <div class="hc-status confirmed">Confirmed</div>
+    </div>
+  </div>
+</section>
+
+<!-- SPECIALTIES -->
+<section class="section specialties">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-tag">What We Treat</p>
+      <h2>Medical <em>Specialties</em></h2>
+    </div>
+    <div class="spec-grid">
+      <a href="pages/appointment.html?dept=cardiology" class="spec-card">
+        <div class="spec-icon" style="--c:#e74c3c"><i class="fas fa-heart"></i></div>
+        <h3>Cardiology</h3><p>Heart & Vascular</p>
+      </a>
+      <a href="pages/appointment.html?dept=neurology" class="spec-card">
+        <div class="spec-icon" style="--c:#9b59b6"><i class="fas fa-brain"></i></div>
+        <h3>Neurology</h3><p>Brain & Nervous System</p>
+      </a>
+      <a href="pages/appointment.html?dept=orthopedics" class="spec-card">
+        <div class="spec-icon" style="--c:#e67e22"><i class="fas fa-bone"></i></div>
+        <h3>Orthopedics</h3><p>Bones & Joints</p>
+      </a>
+      <a href="pages/appointment.html?dept=pediatrics" class="spec-card">
+        <div class="spec-icon" style="--c:#27ae60"><i class="fas fa-baby"></i></div>
+        <h3>Pediatrics</h3><p>Child Healthcare</p>
+      </a>
+      <a href="pages/appointment.html?dept=dermatology" class="spec-card">
+        <div class="spec-icon" style="--c:#f39c12"><i class="fas fa-user-md"></i></div>
+        <h3>Dermatology</h3><p>Skin & Hair</p>
+      </a>
+      <a href="pages/appointment.html?dept=ophthalmology" class="spec-card">
+        <div class="spec-icon" style="--c:#3498db"><i class="fas fa-eye"></i></div>
+        <h3>Ophthalmology</h3><p>Eye Care</p>
+      </a>
+      <a href="pages/appointment.html?dept=gynecology" class="spec-card">
+        <div class="spec-icon" style="--c:#e91e8c"><i class="fas fa-venus"></i></div>
+        <h3>Gynecology</h3><p>Women's Health</p>
+      </a>
+      <a href="pages/appointment.html?dept=dentistry" class="spec-card">
+        <div class="spec-icon" style="--c:#00bcd4"><i class="fas fa-tooth"></i></div>
+        <h3>Dentistry</h3><p>Oral Health</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section how-it-works">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-tag">Simple Process</p>
+      <h2>Book in <em>3 Easy Steps</em></h2>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-num">01</div>
+        <div class="step-icon"><i class="fas fa-search"></i></div>
+        <h3>Choose Specialist</h3>
+        <p>Browse our expert doctors by specialty, rating, and availability.</p>
+      </div>
+      <div class="step-arrow"><i class="fas fa-chevron-right"></i></div>
+      <div class="step-card">
+        <div class="step-num">02</div>
+        <div class="step-icon"><i class="fas fa-calendar-alt"></i></div>
+        <h3>Pick a Time</h3>
+        <p>Select your preferred date and time slot that fits your schedule.</p>
+      </div>
+      <div class="step-arrow"><i class="fas fa-chevron-right"></i></div>
+      <div class="step-card">
+        <div class="step-num">03</div>
+        <div class="step-icon"><i class="fas fa-check-circle"></i></div>
+        <h3>Get Confirmed</h3>
+        <p>Receive instant confirmation and reminders for your appointment.</p>
+      </div>
+    </div>
+    <div class="cta-center">
+      <a href="pages/appointment.html" class="btn-primary large">Start Booking Now</a>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURED DOCTORS -->
+<section class="section doctors-preview">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-tag">Our Team</p>
+      <h2>Meet Our <em>Top Specialists</em></h2>
+    </div>
+    <div class="docs-grid">
+      <div class="doc-card">
+        <div class="doc-img">DR</div>
+        <div class="doc-info">
+          <h3>Dr. Rajesh Mehta</h3>
+          <p>Senior Cardiologist</p>
+          <div class="doc-rating"><i class="fas fa-star"></i> 4.9 <span>(312 reviews)</span></div>
+          <a href="pages/appointment.html" class="btn-book">Book Now</a>
+        </div>
+      </div>
+      <div class="doc-card">
+        <div class="doc-img dp2">SP</div>
+        <div class="doc-info">
+          <h3>Dr. Sunita Patel</h3>
+          <p>Neurologist</p>
+          <div class="doc-rating"><i class="fas fa-star"></i> 4.8 <span>(278 reviews)</span></div>
+          <a href="pages/appointment.html" class="btn-book">Book Now</a>
+        </div>
+      </div>
+      <div class="doc-card">
+        <div class="doc-img dp3">AK</div>
+        <div class="doc-info">
+          <h3>Dr. Arjun Kumar</h3>
+          <p>Orthopedic Surgeon</p>
+          <div class="doc-rating"><i class="fas fa-star"></i> 4.7 <span>(195 reviews)</span></div>
+          <a href="pages/appointment.html" class="btn-book">Book Now</a>
+        </div>
+      </div>
+    </div>
+    <div class="cta-center">
+      <a href="pages/doctors.html" class="btn-outline large">View All Doctors</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="index.html" class="logo"><span class="logo-icon"><i class="fas fa-heartbeat"></i></span><span>Medi<strong>Core</strong></span></a>
+      <p>Delivering compassionate, world-class healthcare to every patient with dignity and excellence.</p>
+      <div class="footer-socials">
+        <a href="#"><i class="fab fa-facebook"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-linkedin"></i></a>
+      </div>
+    </div>
+    <div class="footer-links">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="pages/appointment.html">Book Appointment</a></li>
+        <li><a href="pages/doctors.html">Find Doctors</a></li>
+        <li><a href="pages/services.html">Services</a></li>
+        <li><a href="pages/contact.html">Contact Us</a></li>
+      </ul>
+    </div>
+    <div class="footer-links">
+      <h4>Portals</h4>
+      <ul>
+        <li><a href="pages/patient-login.html">Patient Login</a></li>
+        <li><a href="pages/staff-login.html">Staff Portal</a></li>
+        <li><a href="pages/admin-login.html">Admin Panel</a></li>
+      </ul>
+    </div>
+    <div class="footer-contact">
+      <h4>Contact</h4>
+      <p><i class="fas fa-map-marker-alt"></i> 42 Medical Avenue, Pune 411001</p>
+      <p><i class="fas fa-phone"></i> +91 20 1234 5678</p>
+      <p><i class="fas fa-envelope"></i> care@medicore.in</p>
+      <p><i class="fas fa-clock"></i> Emergency: 24/7</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 MediCore Hospital. All rights reserved.</p>
+    <div class="footer-portals-links">
+      <a href="pages/admin-login.html">Admin</a> · <a href="pages/staff-login.html">Staff</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+});
+function toggleMenu() {
+  document.querySelector('.nav-links').classList.toggle('open');
+}
+</script>
+</body>
+</html>

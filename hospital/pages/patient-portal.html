@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Portal — MediCore</title>
+  <link rel="stylesheet" href="../css/main.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    .upcoming-appt { background: linear-gradient(135deg,var(--navy),var(--navy-3)); color:white; border-radius:var(--radius); padding:1.5rem; margin-bottom:1.5rem; }
+    .ua-label { font-size:0.78rem; color:rgba(255,255,255,0.5); text-transform:uppercase; letter-spacing:1px; }
+    .ua-doc { font-size:1.3rem; font-family:'Cormorant Garamond',serif; font-weight:600; color:white; margin:0.3rem 0; }
+    .ua-meta { font-size:0.85rem; color:rgba(255,255,255,0.7); }
+    .ua-badge { display:inline-block; background:rgba(201,168,76,0.2); border:1px solid rgba(201,168,76,0.4); color:var(--gold-light); padding:0.2rem 0.8rem; border-radius:50px; font-size:0.75rem; margin-top:0.8rem; }
+    .appt-hist-item { border:1.5px solid var(--light-gray); border-radius:12px; padding:1rem 1.2rem; margin-bottom:0.8rem; display:flex; align-items:center; gap:1rem; transition:all 0.2s; }
+    .appt-hist-item:hover { border-color:var(--gold); }
+    .ahi-icon { width:42px; height:42px; border-radius:10px; background:linear-gradient(135deg,var(--navy),var(--navy-3)); display:flex; align-items:center; justify-content:center; color:var(--gold); font-size:1rem; flex-shrink:0; }
+  </style>
+</head>
+<body>
+<nav class="navbar scrolled">
+  <div class="nav-inner">
+    <a href="../index.html" class="logo"><span class="logo-icon"><i class="fas fa-heartbeat"></i></span><span>Medi<strong>Core</strong></span></a>
+    <ul class="nav-links">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="appointment.html">Book Appointment</a></li>
+    </ul>
+    <div class="nav-actions">
+      <span id="patient-greeting" style="color:white;font-size:0.87rem"></span>
+      <a href="patient-login.html" onclick="sessionStorage.clear()" class="btn-outline">Logout</a>
+    </div>
+  </div>
+</nav>
+
+<div style="padding-top:70px">
+  <div style="max-width:1000px;margin:2rem auto;padding:0 1.5rem">
+    <div style="margin-bottom:2rem">
+      <h2 style="color:var(--navy)">My Health <em>Portal</em></h2>
+      <p>Welcome back! Here's your health summary.</p>
+    </div>
+
+    <!-- UPCOMING -->
+    <div id="upcoming-section"></div>
+
+    <!-- MY APPOINTMENTS -->
+    <div class="card">
+      <div class="card-header">
+        <h3><i class="fas fa-calendar-alt" style="color:var(--gold)"></i> My Appointments</h3>
+        <a href="appointment.html" class="btn-primary"><i class="fas fa-plus"></i> New Appointment</a>
+      </div>
+      <div id="my-appts">
+        <p style="text-align:center;padding:2rem;color:var(--gray)">No appointments found. <a href="appointment.html" style="color:var(--gold)">Book your first one!</a></p>
+      </div>
+    </div>
+
+    <!-- QUICK ACTIONS -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1.5rem">
+      <a href="appointment.html" style="background:var(--navy);color:white;border-radius:var(--radius);padding:1.5rem;text-align:center;transition:all 0.2s" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform=''">
+        <div style="font-size:1.5rem;color:var(--gold);margin-bottom:0.5rem"><i class="fas fa-calendar-plus"></i></div>
+        <strong style="display:block">Book Appointment</strong>
+        <span style="font-size:0.78rem;opacity:0.6">Schedule a visit</span>
+      </a>
+      <div style="background:var(--off-white);border-radius:var(--radius);padding:1.5rem;text-align:center;cursor:pointer" onclick="alert('Medical records feature coming soon!')">
+        <div style="font-size:1.5rem;color:var(--gold);margin-bottom:0.5rem"><i class="fas fa-file-medical"></i></div>
+        <strong style="display:block;color:var(--navy)">Medical Records</strong>
+        <span style="font-size:0.78rem;color:var(--gray)">View your history</span>
+      </div>
+      <div style="background:var(--off-white);border-radius:var(--radius);padding:1.5rem;text-align:center;cursor:pointer" onclick="alert('Contact your care team feature coming soon!')">
+        <div style="font-size:1.5rem;color:var(--gold);margin-bottom:0.5rem"><i class="fas fa-comments"></i></div>
+        <strong style="display:block;color:var(--navy)">Contact Care Team</strong>
+        <span style="font-size:0.78rem;color:var(--gray)">Send a message</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const patient = JSON.parse(sessionStorage.getItem('medicore_patient')||'null');
+if(!patient){ window.location.href='patient-login.html'; }
+document.getElementById('patient-greeting').textContent = `Hi, ${patient.name||'Patient'}`;
+
+const allAppts = JSON.parse(localStorage.getItem('medicore_appointments')||'[]');
+const myAppts = allAppts.filter(a=>a.phone===patient.phone||a.email===patient.email);
+
+// Upcoming
+const upcoming = myAppts.filter(a=>a.status==='Confirmed'||a.status==='Pending');
+const upSec = document.getElementById('upcoming-section');
+if(upcoming.length>0){
+  const u=upcoming[0];
+  upSec.innerHTML=`<div class="upcoming-appt">
+    <div class="ua-label"><i class="fas fa-calendar-check"></i> Next Appointment</div>
+    <div class="ua-doc">${u.doctor}</div>
+    <div class="ua-meta">${u.specialty} · ${u.date} at ${u.time}</div>
+    <div class="ua-badge">Appointment ID: ${u.id}</div>
+  </div>`;
+}
+
+// All
+const container = document.getElementById('my-appts');
+if(myAppts.length===0){
+  container.innerHTML='<p style="text-align:center;padding:2rem;color:var(--gray)">No appointments found. <a href="appointment.html" style="color:var(--gold)">Book your first one!</a></p>';
+} else {
+  container.innerHTML='';
+  myAppts.forEach(a=>{
+    const sc={Pending:'warning',Confirmed:'info',Completed:'success',Cancelled:'danger'}[a.status]||'info';
+    const div=document.createElement('div');
+    div.className='appt-hist-item';
+    div.innerHTML=`
+      <div class="ahi-icon"><i class="fas fa-user-md"></i></div>
+      <div style="flex:1">
+        <strong style="color:var(--navy)">${a.doctor}</strong>
+        <div style="font-size:0.8rem;color:var(--gray)">${a.specialty} · ${a.date} at ${a.time}</div>
+        <div style="font-size:0.75rem;color:var(--gray);margin-top:0.2rem">${a.reason||''}</div>
+      </div>
+      <div style="text-align:right">
+        <div><span class="badge badge-${sc}">${a.status}</span></div>
+        <div style="font-size:0.78rem;color:var(--gray);margin-top:0.3rem">${a.id}</div>
+        <div style="font-weight:600;color:var(--navy);font-size:0.85rem">${a.fee}</div>
+      </div>`;
+    container.appendChild(div);
+  });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Patient Login — MediCore Hospital</title>
+  <link rel="stylesheet" href="../css/main.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+<div class="auth-page">
+  <div class="auth-left">
+    <div class="auth-left-content">
+      <div class="hero-badge"><i class="fas fa-user-injured"></i> Patient Portal</div>
+      <h2 style="margin-top:1rem">Your Health, <em>Simplified</em></h2>
+      <p>Access your appointments, medical history, and stay connected with your healthcare team all in one place.</p>
+      <div class="auth-features">
+        <div class="auth-feature"><i class="fas fa-calendar-alt"></i> View and manage your appointments</div>
+        <div class="auth-feature"><i class="fas fa-file-medical"></i> Access your medical records</div>
+        <div class="auth-feature"><i class="fas fa-bell"></i> Get appointment reminders</div>
+        <div class="auth-feature"><i class="fas fa-comments"></i> Message your care team</div>
+      </div>
+    </div>
+  </div>
+  <div class="auth-right">
+    <div class="auth-box">
+      <a href="../index.html" class="logo" style="color:var(--navy)"><span class="logo-icon"><i class="fas fa-heartbeat"></i></span><span>Medi<strong>Core</strong></span></a>
+      <div id="form-login">
+        <h3 style="margin-top:1.5rem">Patient Login</h3>
+        <p class="subtitle">Welcome back! Sign in to your account</p>
+        <div id="error-login" style="display:none" class="alert alert-error"><i class="fas fa-exclamation-circle"></i> Phone not found. Try registering first.</div>
+        <div class="form-group"><label>Phone Number</label><input type="tel" id="login-phone" placeholder="+91 98765 43210"/></div>
+        <div class="form-group"><label>Password / OTP</label>
+          <input type="password" id="login-pass" placeholder="Enter password"/>
+        </div>
+        <button class="btn-primary btn-full" style="cursor:pointer" onclick="patientLogin()">Sign In</button>
+        <div class="auth-footer" style="margin-top:1rem">
+          Don't have an account? <a href="#" onclick="showRegister()">Register here</a>
+        </div>
+        <div class="auth-footer" style="margin-top:0.5rem">
+          <a href="../index.html">← Back to Home</a>
+        </div>
+      </div>
+      <div id="form-register" style="display:none">
+        <h3 style="margin-top:1.5rem">Create Account</h3>
+        <p class="subtitle">Register as a new patient</p>
+        <div id="error-reg" style="display:none" class="alert alert-error"></div>
+        <div id="success-reg" style="display:none" class="alert alert-success"><i class="fas fa-check-circle"></i> Registered! You can now login.</div>
+        <div class="form-grid-2">
+          <div class="form-group"><label>First Name</label><input type="text" id="reg-fname" placeholder="First name"/></div>
+          <div class="form-group"><label>Last Name</label><input type="text" id="reg-lname" placeholder="Last name"/></div>
+        </div>
+        <div class="form-group"><label>Phone Number *</label><input type="tel" id="reg-phone" placeholder="+91 98765 43210"/></div>
+        <div class="form-group"><label>Email</label><input type="email" id="reg-email" placeholder="email@example.com"/></div>
+        <div class="form-group"><label>Password *</label><input type="password" id="reg-pass" placeholder="Create a password"/></div>
+        <button class="btn-primary btn-full" style="cursor:pointer" onclick="registerPatient()">Create Account</button>
+        <div class="auth-footer" style="margin-top:1rem">Already have an account? <a href="#" onclick="showLogin()">Login</a></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+function showRegister(){ document.getElementById('form-login').style.display='none'; document.getElementById('form-register').style.display='block'; }
+function showLogin(){ document.getElementById('form-register').style.display='none'; document.getElementById('form-login').style.display='block'; }
+function registerPatient(){
+  const fname=document.getElementById('reg-fname').value.trim();
+  const lname=document.getElementById('reg-lname').value.trim();
+  const phone=document.getElementById('reg-phone').value.trim();
+  const pass=document.getElementById('reg-pass').value;
+  if(!phone||!pass){ document.getElementById('error-reg').textContent='Phone and password are required.'; document.getElementById('error-reg').style.display='flex'; return; }
+  const users=JSON.parse(localStorage.getItem('medicore_patients')||'[]');
+  if(users.find(u=>u.phone===phone)){ document.getElementById('error-reg').textContent='Phone already registered.'; document.getElementById('error-reg').style.display='flex'; return; }
+  users.push({name:`${fname} ${lname}`.trim(),phone,email:document.getElementById('reg-email').value,pass});
+  localStorage.setItem('medicore_patients',JSON.stringify(users));
+  document.getElementById('error-reg').style.display='none';
+  document.getElementById('success-reg').style.display='flex';
+}
+function patientLogin(){
+  const phone=document.getElementById('login-phone').value.trim();
+  const pass=document.getElementById('login-pass').value;
+  const users=JSON.parse(localStorage.getItem('medicore_patients')||'[]');
+  const u=users.find(u=>u.phone===phone&&u.pass===pass);
+  if(u){ sessionStorage.setItem('medicore_patient',JSON.stringify(u)); window.location.href='patient-portal.html'; }
+  else { document.getElementById('error-login').style.display='flex'; }
+}
+</script>
+</body>
+</html>

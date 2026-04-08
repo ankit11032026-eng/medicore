@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Staff Dashboard — MediCore</title>
+  <link rel="stylesheet" href="../css/main.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    .queue-card {
+      border: 1.5px solid var(--light-gray); border-radius: var(--radius);
+      padding: 1.2rem; margin-bottom: 0.8rem; transition: all 0.2s;
+      display: flex; align-items: center; gap: 1rem;
+    }
+    .queue-card:hover { border-color: var(--gold); box-shadow: var(--shadow); }
+    .q-num { width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, var(--navy), var(--navy-3));
+      display: flex; align-items: center; justify-content: center; color: var(--gold); font-weight: 700;
+      font-size: 1rem; flex-shrink: 0; font-family: 'Cormorant Garamond', serif; }
+    .q-info { flex: 1; }
+    .q-info strong { display: block; font-size: 0.95rem; color: var(--navy); }
+    .q-info span { font-size: 0.8rem; color: var(--gray); }
+    .q-meta { text-align: right; }
+    .q-meta .time { font-size: 0.82rem; font-weight: 600; color: var(--navy); }
+    .q-meta .doc { font-size: 0.75rem; color: var(--gray); margin-top: 0.2rem; }
+    .action-btn { padding: 0.4rem 0.9rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600;
+      border: none; cursor: pointer; transition: all 0.2s; font-family: 'DM Sans', sans-serif; }
+    .action-checkin { background: rgba(59,130,246,0.1); color: #2563eb; }
+    .action-checkin:hover { background: #2563eb; color: white; }
+    .action-done { background: rgba(16,185,129,0.1); color: #059669; }
+    .action-done:hover { background: #059669; color: white; }
+    .action-contact { background: rgba(245,158,11,0.1); color: #d97706; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem; }
+    .patient-detail-card { background: var(--off-white); border-radius: 12px; padding: 1rem; margin-top: 0.8rem; font-size: 0.85rem; }
+    .pdc-row { display: flex; gap: 0.5rem; margin-bottom: 0.5rem; }
+    .pdc-label { color: var(--gray); min-width: 100px; }
+    .pdc-val { color: var(--navy); font-weight: 500; }
+    .sidebar { background: linear-gradient(180deg, #0d4a2a, #0a2818); }
+    .topbar-dept { background: rgba(16,185,129,0.1); color: #059669; padding: 0.3rem 0.8rem; border-radius: 50px; font-size: 0.78rem; font-weight: 600; }
+    .scroll-table { overflow-x: auto; }
+    .tabs { display: flex; gap: 0; border-bottom: 2px solid var(--light-gray); margin-bottom: 1.5rem; }
+    .tab { padding: 0.7rem 1.5rem; cursor: pointer; font-size: 0.88rem; font-weight: 500;
+      color: var(--gray); border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
+    .tab.active { color: var(--navy); border-bottom-color: var(--gold); font-weight: 600; }
+    .tab-pane { display: none; }
+    .tab-pane.active { display: block; animation: fadeIn 0.2s ease; }
+    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+    .patient-search-row { display: flex; gap: 0.8rem; margin-bottom: 1.2rem; flex-wrap: wrap; }
+  </style>
+</head>
+<body>
+<div class="dashboard-layout">
+  <aside class="sidebar" style="background:linear-gradient(180deg,#0a2818,#0d3a1e)">
+    <div class="sidebar-logo">
+      <a href="../index.html" class="logo"><span class="logo-icon"><i class="fas fa-heartbeat"></i></span><span>Medi<strong>Core</strong></span></a>
+      <div style="margin-top:0.5rem;font-size:0.72rem;color:rgba(16,185,129,0.9);display:flex;align-items:center;gap:0.3rem"><i class="fas fa-id-badge"></i> STAFF PORTAL</div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-title">Overview</div>
+      <a href="staff-dashboard.html" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+      <div class="nav-section-title">Patients</div>
+      <a href="#" onclick="switchTab('queue')"><i class="fas fa-list-ol"></i> Today's Queue</a>
+      <a href="#" onclick="switchTab('all-appts')"><i class="fas fa-calendar-alt"></i> All Appointments</a>
+      <a href="#" onclick="switchTab('patient-records')"><i class="fas fa-folder-open"></i> Patient Records</a>
+      <div class="nav-section-title">Tools</div>
+      <a href="appointment.html" target="_blank"><i class="fas fa-plus-circle"></i> New Booking</a>
+      <a href="#"><i class="fas fa-phone-alt"></i> Contacts</a>
+      <a href="#"><i class="fas fa-print"></i> Print Reports</a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="s-avatar" style="background:linear-gradient(135deg,#059669,#064e3b)">SF</div>
+        <div><strong id="staff-name">Staff Member</strong><span id="staff-dept">Reception</span></div>
+      </div>
+      <a href="staff-login.html" onclick="sessionStorage.clear()" style="display:flex;align-items:center;gap:0.5rem;margin-top:0.8rem;font-size:0.8rem;color:rgba(255,255,255,0.4)"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </div>
+  </aside>
+
+  <main class="dashboard-main">
+    <div class="dashboard-topbar">
+      <div class="topbar-title">Staff Dashboard</div>
+      <div class="topbar-actions">
+        <span class="topbar-dept" id="dept-badge">Reception</span>
+        <span style="font-size:0.82rem;color:var(--gray)" id="today-label"></span>
+      </div>
+    </div>
+    <div class="dashboard-content">
+
+      <!-- STAT CARDS -->
+      <div class="stat-cards" style="grid-template-columns:repeat(4,1fr)">
+        <div class="stat-card">
+          <div class="sc-icon" style="background:rgba(59,130,246,0.1);color:#2563eb"><i class="fas fa-calendar-day"></i></div>
+          <div class="sc-value" id="s-today">0</div>
+          <div class="sc-label">Today's Appointments</div>
+        </div>
+        <div class="stat-card">
+          <div class="sc-icon" style="background:rgba(245,158,11,0.1);color:#d97706"><i class="fas fa-hourglass-half"></i></div>
+          <div class="sc-value" id="s-waiting">0</div>
+          <div class="sc-label">Waiting / Pending</div>
+        </div>
+        <div class="stat-card">
+          <div class="sc-icon" style="background:rgba(16,185,129,0.1);color:#059669"><i class="fas fa-user-check"></i></div>
+          <div class="sc-value" id="s-checked">0</div>
+          <div class="sc-label">Checked In</div>
+        </div>
+        <div class="stat-card">
+          <div class="sc-icon" style="background:rgba(139,92,246,0.1);color:#7c3aed"><i class="fas fa-check-double"></i></div>
+          <div class="sc-value" id="s-done">0</div>
+          <div class="sc-label">Completed</div>
+        </div>
+      </div>
+
+      <!-- TABS -->
+      <div class="card">
+        <div class="tabs">
+          <div class="tab active" onclick="switchTab('queue',this)" id="tab-queue">Today's Queue</div>
+          <div class="tab" onclick="switchTab('all-appts',this)" id="tab-all">All Appointments</div>
+          <div class="tab" onclick="switchTab('patient-records',this)" id="tab-rec">Patient Records</div>
+        </div>
+
+        <!-- QUEUE -->
+        <div class="tab-pane active" id="pane-queue">
+          <div id="queue-list"><p style="color:var(--gray);text-align:center;padding:2rem"><i class="fas fa-spinner fa-spin"></i> Loading...</p></div>
+        </div>
+
+        <!-- ALL APPOINTMENTS -->
+        <div class="tab-pane" id="pane-all">
+          <div class="patient-search-row">
+            <input type="text" placeholder="Search patient / doctor / ID..." id="staff-search" oninput="renderStaffTable()" style="padding:0.5rem 1rem;border:1.5px solid var(--light-gray);border-radius:8px;font-size:0.85rem;outline:none;flex:1"/>
+            <select id="staff-status-filter" onchange="renderStaffTable()" style="padding:0.5rem 1rem;border:1.5px solid var(--light-gray);border-radius:8px;font-size:0.85rem;outline:none">
+              <option value="">All Status</option>
+              <option value="Pending">Pending</option>
+              <option value="Confirmed">Confirmed</option>
+              <option value="Completed">Completed</option>
+              <option value="Cancelled">Cancelled</option>
+            </select>
+          </div>
+          <div class="scroll-table">
+            <table class="data-table">
+              <thead><tr><th>ID</th><th>Patient</th><th>Phone</th><th>Doctor</th><th>Date</th><th>Time</th><th>Reason</th><th>Status</th><th>Action</th></tr></thead>
+              <tbody id="staff-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- PATIENT RECORDS -->
+        <div class="tab-pane" id="pane-patient-records">
+          <div class="patient-search-row">
+            <input type="text" placeholder="Search by patient name or phone..." id="rec-search" oninput="renderRecords()" style="padding:0.5rem 1rem;border:1.5px solid var(--light-gray);border-radius:8px;font-size:0.85rem;outline:none;flex:1"/>
+          </div>
+          <div id="records-list"></div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<script>
+if(!sessionStorage.getItem('medicore_staff')){ window.location.href='staff-login.html'; }
+
+const dept = sessionStorage.getItem('staff_dept')||'Reception';
+document.getElementById('dept-badge').textContent = dept;
+document.getElementById('staff-dept').textContent = dept;
+document.getElementById('today-label').textContent = new Date().toLocaleDateString('en-IN',{weekday:'long',month:'long',day:'numeric'});
+
+let appointments = [];
+
+function loadData() {
+  appointments = JSON.parse(localStorage.getItem('medicore_appointments')||'[]');
+  if(appointments.length===0){
+    const demo=[
+      {id:'APT-2026-DEMO1',doctor:'Dr. Rajesh Mehta',specialty:'Cardiology',fee:'₹800',date:'1 Apr 2026',time:'9:00 AM',patient:'Ravi Sharma',phone:'9876543210',email:'ravi@email.com',gender:'Male',blood:'O+',reason:'Chest pain and shortness of breath',status:'Confirmed',createdAt:new Date().toISOString()},
+      {id:'APT-2026-DEMO2',doctor:'Dr. Sunita Patel',specialty:'Neurology',fee:'₹900',date:'1 Apr 2026',time:'10:00 AM',patient:'Priya Das',phone:'9812345678',email:'priya@email.com',gender:'Female',blood:'A+',reason:'Frequent headaches',status:'Pending',createdAt:new Date().toISOString()},
+      {id:'APT-2026-DEMO3',doctor:'Dr. Arjun Kumar',specialty:'Orthopedics',fee:'₹750',date:'1 Apr 2026',time:'11:00 AM',patient:'Suresh Joshi',phone:'9900112233',email:'suresh@email.com',gender:'Male',blood:'B+',reason:'Knee pain',status:'Pending',createdAt:new Date().toISOString()},
+      {id:'APT-2026-DEMO4',doctor:'Dr. Priya Sharma',specialty:'Pediatrics',fee:'₹600',date:'1 Apr 2026',time:'11:30 AM',patient:'Baby Ananya',phone:'9898989898',email:'parent@email.com',gender:'Female',blood:'AB+',reason:'Fever and cold',status:'Completed',createdAt:new Date().toISOString()},
+    ];
+    localStorage.setItem('medicore_appointments',JSON.stringify(demo));
+    appointments=demo;
+  }
+  updateStaffStats();
+  renderQueue();
+  renderStaffTable();
+  renderRecords();
+}
+
+function updateStaffStats(){
+  const today = appointments.filter(a=>a.status!=='Cancelled');
+  document.getElementById('s-today').textContent=today.length;
+  document.getElementById('s-waiting').textContent=appointments.filter(a=>a.status==='Pending').length;
+  document.getElementById('s-checked').textContent=appointments.filter(a=>a.status==='Confirmed').length;
+  document.getElementById('s-done').textContent=appointments.filter(a=>a.status==='Completed').length;
+}
+
+function renderQueue(){
+  const container=document.getElementById('queue-list');
+  const active=appointments.filter(a=>a.status==='Pending'||a.status==='Confirmed');
+  if(active.length===0){container.innerHTML='<p style="color:var(--gray);text-align:center;padding:2rem"><i class="fas fa-check-circle" style="color:var(--success);font-size:2rem;display:block;margin-bottom:0.5rem"></i>No patients in queue right now</p>';return;}
+  container.innerHTML='';
+  active.forEach((a,i)=>{
+    const div=document.createElement('div');
+    div.className='queue-card';
+    const statusBadge = a.status==='Confirmed'?`<span class="badge badge-info">Checked In</span>`:`<span class="badge badge-warning">Waiting</span>`;
+    div.innerHTML=`
+      <div class="q-num">${i+1}</div>
+      <div class="q-info">
+        <strong>${a.patient}</strong>
+        <span>${a.specialty} — ${a.doctor}</span>
+        <div style="margin-top:0.4rem">
+          <span style="font-size:0.75rem;color:var(--gray)">Phone: ${a.phone||'—'} &nbsp;·&nbsp; Blood: ${a.blood||'—'} &nbsp;·&nbsp; ${a.reason||'—'}</span>
+        </div>
+      </div>
+      <div class="q-meta">
+        <div class="time">${a.time}</div>
+        <div class="doc">${a.date}</div>
+        <div style="margin-top:0.4rem">${statusBadge}</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:0.4rem">
+        ${a.status==='Pending'?`<button class="action-btn action-checkin" onclick="updateApptStatus('${a.id}','Confirmed')"><i class="fas fa-sign-in-alt"></i> Check In</button>`:''}
+        <button class="action-btn action-done" onclick="updateApptStatus('${a.id}','Completed')"><i class="fas fa-check"></i> Done</button>
+        <button class="action-btn action-contact" onclick="alert('Calling ${a.phone}...')"><i class="fas fa-phone"></i> Call</button>
+      </div>`;
+    container.appendChild(div);
+  });
+}
+
+function renderStaffTable(){
+  const search=document.getElementById('staff-search').value.toLowerCase();
+  const status=document.getElementById('staff-status-filter').value;
+  const filtered=appointments.filter(a=>{
+    const ms=!search||a.patient.toLowerCase().includes(search)||a.doctor.toLowerCase().includes(search)||a.id.toLowerCase().includes(search)||a.phone?.includes(search);
+    return ms&&(!status||a.status===status);
+  });
+  const tbody=document.getElementById('staff-tbody');
+  tbody.innerHTML='';
+  filtered.forEach(a=>{
+    const sc={Pending:'warning',Confirmed:'info',Completed:'success',Cancelled:'danger'}[a.status]||'info';
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td><small style="color:var(--gray)">${a.id}</small></td>
+      <td><strong>${a.patient}</strong></td>
+      <td>${a.phone||'—'}</td>
+      <td>${a.doctor}</td>
+      <td>${a.date}</td>
+      <td>${a.time}</td>
+      <td style="max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${a.reason}">${a.reason||'—'}</td>
+      <td><span class="badge badge-${sc}">${a.status}</span></td>
+      <td style="display:flex;gap:0.3rem;flex-wrap:wrap">
+        ${a.status==='Pending'?`<button class="action-btn action-checkin" onclick="updateApptStatus('${a.id}','Confirmed')">Check In</button>`:''}
+        ${a.status==='Confirmed'?`<button class="action-btn action-done" onclick="updateApptStatus('${a.id}','Completed')">Complete</button>`:''}
+      </td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+function renderRecords(){
+  const search=document.getElementById('rec-search').value.toLowerCase();
+  const container=document.getElementById('records-list');
+  // Group by patient name
+  const byPatient={};
+  appointments.forEach(a=>{
+    if(!byPatient[a.patient]) byPatient[a.patient]={patient:a.patient,phone:a.phone,email:a.email,gender:a.gender,blood:a.blood,visits:[]};
+    byPatient[a.patient].visits.push(a);
+  });
+  const patients=Object.values(byPatient).filter(p=>!search||p.patient.toLowerCase().includes(search)||p.phone?.includes(search));
+  if(patients.length===0){container.innerHTML='<p style="color:var(--gray);text-align:center;padding:2rem">No patient records found.</p>';return;}
+  container.innerHTML='';
+  patients.forEach(p=>{
+    const div=document.createElement('div');
+    div.style.cssText='border:1.5px solid var(--light-gray);border-radius:var(--radius);padding:1.2rem;margin-bottom:1rem';
+    div.innerHTML=`
+      <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1rem">
+        <div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--navy),var(--navy-3));display:flex;align-items:center;justify-content:center;color:var(--gold);font-weight:700;font-family:'Cormorant Garamond',serif;font-size:1.1rem">${p.patient.split(' ').map(n=>n[0]).join('').substring(0,2)}</div>
+        <div><strong style="color:var(--navy);font-size:1rem">${p.patient}</strong><br><span style="font-size:0.78rem;color:var(--gray)">${p.phone||'—'} · ${p.gender||'—'} · Blood: ${p.blood||'—'}</span></div>
+        <div style="margin-left:auto"><span class="badge badge-info">${p.visits.length} Visit${p.visits.length>1?'s':''}</span></div>
+      </div>
+      <div style="font-size:0.82rem;color:var(--gray)">
+        ${p.visits.map(v=>`<div style="display:flex;justify-content:space-between;padding:0.4rem 0;border-top:1px solid var(--light-gray)">
+          <span>${v.date} ${v.time} — ${v.doctor} (${v.specialty})</span>
+          <span class="badge badge-${({Pending:'warning',Confirmed:'info',Completed:'success',Cancelled:'danger'})[v.status]||'info'}">${v.status}</span>
+        </div>`).join('')}
+      </div>`;
+    container.appendChild(div);
+  });
+}
+
+function updateApptStatus(id,status){
+  const idx=appointments.findIndex(a=>a.id===id);
+  if(idx>-1){appointments[idx].status=status;localStorage.setItem('medicore_appointments',JSON.stringify(appointments));loadData();}
+}
+
+function switchTab(name,tabEl){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+  if(tabEl) tabEl.classList.add('active');
+  else document.getElementById('tab-'+name.replace('-appts','all').replace('patient-records','rec')).classList.add('active');
+  const pane=document.getElementById('pane-'+name);
+  if(pane) pane.classList.add('active');
+}
+loadData();
+</script>
+</body>
+</html>

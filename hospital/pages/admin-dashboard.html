@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Dashboard — MediCore</title>
+  <link rel="stylesheet" href="../css/main.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .chart-bar-wrap { display: flex; flex-direction: column; gap: 0.6rem; }
+    .chart-bar-item { display: flex; align-items: center; gap: 0.8rem; font-size: 0.82rem; }
+    .chart-bar-label { width: 100px; color: var(--gray); }
+    .chart-bar-bg { flex: 1; height: 8px; background: var(--light-gray); border-radius: 4px; }
+    .chart-bar-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--navy), var(--gold)); }
+    .chart-bar-val { width: 40px; text-align: right; color: var(--navy); font-weight: 600; }
+    .action-btn { padding: 0.4rem 0.9rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600;
+      border: none; cursor: pointer; transition: all 0.2s; font-family: 'DM Sans', sans-serif; }
+    .action-approve { background: rgba(16,185,129,0.1); color: #059669; }
+    .action-approve:hover { background: #059669; color: white; }
+    .action-reject { background: rgba(239,68,68,0.1); color: #dc2626; }
+    .action-reject:hover { background: #dc2626; color: white; }
+    .action-view { background: rgba(59,130,246,0.1); color: #2563eb; }
+    .action-view:hover { background: #2563eb; color: white; }
+    .stat-card .sc-icon.blue { background: rgba(59,130,246,0.1); color: #2563eb; }
+    .stat-card .sc-icon.green { background: rgba(16,185,129,0.1); color: #059669; }
+    .stat-card .sc-icon.amber { background: rgba(245,158,11,0.1); color: #d97706; }
+    .stat-card .sc-icon.red { background: rgba(239,68,68,0.1); color: #dc2626; }
+    .scroll-table { overflow-x: auto; }
+    .recent-activity { display: flex; flex-direction: column; gap: 0.8rem; }
+    .activity-item { display: flex; align-items: flex-start; gap: 0.8rem; padding: 0.6rem 0;
+      border-bottom: 1px solid var(--light-gray); }
+    .activity-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center;
+      justify-content: center; font-size: 0.75rem; flex-shrink: 0; }
+    .activity-text strong { display: block; font-size: 0.85rem; color: var(--navy); }
+    .activity-text span { font-size: 0.75rem; color: var(--gray); }
+    .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 2000;
+      display: none; align-items: center; justify-content: center; }
+    .modal-backdrop.open { display: flex; }
+    .modal { background: white; border-radius: var(--radius); padding: 2rem; max-width: 500px; width: 90%; }
+    .modal h3 { margin-bottom: 1.2rem; color: var(--navy); }
+    .modal-footer { display: flex; gap: 0.8rem; justify-content: flex-end; margin-top: 1.5rem; }
+  </style>
+</head>
+<body>
+<div class="dashboard-layout">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <a href="../index.html" class="logo"><span class="logo-icon"><i class="fas fa-heartbeat"></i></span><span>Medi<strong>Core</strong></span></a>
+      <div style="margin-top:0.5rem;font-size:0.72rem;color:rgba(239,68,68,0.8);display:flex;align-items:center;gap:0.3rem"><i class="fas fa-shield-alt"></i> ADMIN PANEL</div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-title">Main</div>
+      <a href="admin-dashboard.html" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+      <a href="#" onclick="showSection('appointments')"><i class="fas fa-calendar-check"></i> Appointments</a>
+      <a href="#" onclick="showSection('patients')"><i class="fas fa-users"></i> Patients</a>
+      <div class="nav-section-title">Management</div>
+      <a href="#" onclick="showSection('doctors')"><i class="fas fa-user-md"></i> Doctors</a>
+      <a href="#" onclick="showSection('staff')"><i class="fas fa-id-badge"></i> Staff</a>
+      <a href="#" onclick="showSection('departments')"><i class="fas fa-hospital"></i> Departments</a>
+      <div class="nav-section-title">Reports</div>
+      <a href="#"><i class="fas fa-chart-bar"></i> Analytics</a>
+      <a href="#"><i class="fas fa-file-invoice"></i> Billing</a>
+      <a href="#"><i class="fas fa-cog"></i> Settings</a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="s-avatar">AD</div>
+        <div><strong>Administrator</strong><span>admin@medicore.in</span></div>
+      </div>
+      <a href="admin-login.html" onclick="sessionStorage.clear()" style="display:flex;align-items:center;gap:0.5rem;margin-top:0.8rem;font-size:0.8rem;color:rgba(255,255,255,0.4)"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="dashboard-main">
+    <div class="dashboard-topbar">
+      <div class="topbar-title">Dashboard Overview</div>
+      <div class="topbar-actions">
+        <span style="font-size:0.82rem;color:var(--gray)">Today: <strong id="today-date"></strong></span>
+        <button class="btn-primary" onclick="window.location.href='appointment.html'"><i class="fas fa-plus"></i> New Appointment</button>
+      </div>
+    </div>
+    <div class="dashboard-content">
+
+      <!-- STAT CARDS -->
+      <div class="stat-cards">
+        <div class="stat-card">
+          <div class="sc-icon blue"><i class="fas fa-calendar-check"></i></div>
+          <div class="sc-value" id="stat-total">0</div>
+          <div class="sc-label">Total Appointments</div>
+          <div class="sc-change" style="color:#2563eb">All time</div>
+        </div>
+        <div class="stat-card">
+          <div class="sc-icon amber"><i class="fas fa-clock"></i></div>
+          <div class="sc-value" id="stat-pending">0</div>
+          <div class="sc-label">Pending Approvals</div>
+          <div class="sc-change" style="color:#d97706">Awaiting action</div>
+        </div>
+        <div class="stat-card">
+          <div class="sc-icon green"><i class="fas fa-check-circle"></i></div>
+          <div class="sc-value" id="stat-confirmed">0</div>
+          <div class="sc-label">Confirmed Today</div>
+          <div class="sc-change" style="color:#059669">Ready to see</div>
+        </div>
+        <div class="stat-card">
+          <div class="sc-icon red"><i class="fas fa-users"></i></div>
+          <div class="sc-value" id="stat-patients">0</div>
+          <div class="sc-label">Total Patients</div>
+          <div class="sc-change" style="color:#dc2626">Registered</div>
+        </div>
+      </div>
+
+      <!-- APPOINTMENTS TABLE + ACTIVITY -->
+      <div class="grid-2">
+        <div class="card" style="grid-column:1/-1">
+          <div class="card-header">
+            <h3><i class="fas fa-calendar-alt" style="color:var(--gold)"></i> Recent Appointments</h3>
+            <div style="display:flex;gap:0.6rem">
+              <input type="text" placeholder="Search..." id="search-appt" oninput="renderTable()" style="padding:0.4rem 0.8rem;border:1.5px solid var(--light-gray);border-radius:8px;font-size:0.82rem;outline:none;width:180px"/>
+              <select id="filter-status" onchange="renderTable()" style="padding:0.4rem 0.8rem;border:1.5px solid var(--light-gray);border-radius:8px;font-size:0.82rem;outline:none">
+                <option value="">All Status</option>
+                <option value="Pending">Pending</option>
+                <option value="Confirmed">Confirmed</option>
+                <option value="Completed">Completed</option>
+                <option value="Cancelled">Cancelled</option>
+              </select>
+            </div>
+          </div>
+          <div class="scroll-table">
+            <table class="data-table" id="appt-table">
+              <thead><tr>
+                <th>Appt ID</th><th>Patient</th><th>Doctor</th><th>Specialty</th>
+                <th>Date</th><th>Time</th><th>Status</th><th>Actions</th>
+              </tr></thead>
+              <tbody id="appt-tbody"></tbody>
+            </table>
+          </div>
+          <div id="no-appts" style="text-align:center;padding:2rem;color:var(--gray);display:none">
+            <i class="fas fa-calendar-times" style="font-size:2rem;margin-bottom:0.5rem;display:block"></i>
+            No appointments found. <a href="appointment.html" style="color:var(--gold)">Book one now</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- DEPT STATS + ACTIVITY -->
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header"><h3><i class="fas fa-hospital" style="color:var(--gold)"></i> Appointments by Dept.</h3></div>
+          <div class="chart-bar-wrap">
+            <div class="chart-bar-item"><div class="chart-bar-label">Cardiology</div><div class="chart-bar-bg"><div class="chart-bar-fill" style="width:85%"></div></div><div class="chart-bar-val">85</div></div>
+            <div class="chart-bar-item"><div class="chart-bar-label">Neurology</div><div class="chart-bar-bg"><div class="chart-bar-fill" style="width:70%"></div></div><div class="chart-bar-val">70</div></div>
+            <div class="chart-bar-item"><div class="chart-bar-label">Orthopedics</div><div class="chart-bar-bg"><div class="chart-bar-fill" style="width:60%"></div></div><div class="chart-bar-val">60</div></div>
+            <div class="chart-bar-item"><div class="chart-bar-label">Pediatrics</div><div class="chart-bar-bg"><div class="chart-bar-fill" style="width:55%"></div></div><div class="chart-bar-val">55</div></div>
+            <div class="chart-bar-item"><div class="chart-bar-label">Dermatology</div><div class="chart-bar-bg"><div class="chart-bar-fill" style="width:45%"></div></div><div class="chart-bar-val">45</div></div>
+            <div class="chart-bar-item"><div class="chart-bar-label">Gynecology</div><div class="chart-bar-bg"><div class="chart-bar-fill" style="width:40%"></div></div><div class="chart-bar-val">40</div></div>
+            <div class="chart-bar-item"><div class="chart-bar-label">Dentistry</div><div class="chart-bar-bg"><div class="chart-bar-fill" style="width:30%"></div></div><div class="chart-bar-val">30</div></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3><i class="fas fa-bell" style="color:var(--gold)"></i> Recent Activity</h3></div>
+          <div class="recent-activity">
+            <div class="activity-item">
+              <div class="activity-icon" style="background:rgba(16,185,129,0.1);color:#059669"><i class="fas fa-check"></i></div>
+              <div class="activity-text"><strong>Appointment Confirmed</strong><span>Dr. Mehta — Ravi Sharma · 2 min ago</span></div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-icon" style="background:rgba(59,130,246,0.1);color:#2563eb"><i class="fas fa-user-plus"></i></div>
+              <div class="activity-text"><strong>New Patient Registered</strong><span>Anjali Verma · 8 min ago</span></div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-icon" style="background:rgba(245,158,11,0.1);color:#d97706"><i class="fas fa-calendar"></i></div>
+              <div class="activity-text"><strong>New Appointment Booked</strong><span>Dr. Patel — Mohan Das · 15 min ago</span></div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-icon" style="background:rgba(239,68,68,0.1);color:#dc2626"><i class="fas fa-times"></i></div>
+              <div class="activity-text"><strong>Appointment Cancelled</strong><span>Dr. Kumar — Preethi N. · 25 min ago</span></div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-icon" style="background:rgba(16,185,129,0.1);color:#059669"><i class="fas fa-check-double"></i></div>
+              <div class="activity-text"><strong>Consultation Completed</strong><span>Dr. Sharma — Baby Girl · 1 hr ago</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DOCTOR MANAGEMENT -->
+      <div class="card" id="section-doctors" style="display:none">
+        <div class="card-header"><h3><i class="fas fa-user-md" style="color:var(--gold)"></i> Doctor Management</h3>
+          <button class="btn-primary" onclick="alert('Add Doctor form coming soon!')"><i class="fas fa-plus"></i> Add Doctor</button></div>
+        <div class="scroll-table">
+          <table class="data-table">
+            <thead><tr><th>ID</th><th>Name</th><th>Specialty</th><th>Experience</th><th>Fee</th><th>Rating</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody>
+              <tr><td>D001</td><td>Dr. Rajesh Mehta</td><td>Cardiology</td><td>15 yrs</td><td>₹800</td><td><i class="fas fa-star" style="color:#f59e0b"></i> 4.9</td><td><span class="badge badge-success">Active</span></td><td><button class="action-btn action-view">Edit</button></td></tr>
+              <tr><td>D002</td><td>Dr. Sunita Patel</td><td>Neurology</td><td>12 yrs</td><td>₹900</td><td><i class="fas fa-star" style="color:#f59e0b"></i> 4.8</td><td><span class="badge badge-success">Active</span></td><td><button class="action-btn action-view">Edit</button></td></tr>
+              <tr><td>D003</td><td>Dr. Arjun Kumar</td><td>Orthopedics</td><td>10 yrs</td><td>₹750</td><td><i class="fas fa-star" style="color:#f59e0b"></i> 4.7</td><td><span class="badge badge-success">Active</span></td><td><button class="action-btn action-view">Edit</button></td></tr>
+              <tr><td>D004</td><td>Dr. Priya Sharma</td><td>Pediatrics</td><td>8 yrs</td><td>₹600</td><td><i class="fas fa-star" style="color:#f59e0b"></i> 4.9</td><td><span class="badge badge-success">Active</span></td><td><button class="action-btn action-view">Edit</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- MODAL -->
+<div class="modal-backdrop" id="appt-modal">
+  <div class="modal">
+    <h3><i class="fas fa-calendar-check" style="color:var(--gold)"></i> Appointment Details</h3>
+    <div id="modal-content"></div>
+    <div class="modal-footer">
+      <button class="action-btn action-approve" style="padding:0.6rem 1.2rem" id="modal-approve" onclick="modalAction('Confirmed')">Approve</button>
+      <button class="action-btn action-reject" style="padding:0.6rem 1.2rem" id="modal-reject" onclick="modalAction('Cancelled')">Cancel Appt.</button>
+      <button class="action-btn" style="background:var(--light-gray);color:var(--navy);padding:0.6rem 1.2rem" onclick="closeModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// Auth guard
+if(!sessionStorage.getItem('medicore_admin')) { window.location.href='admin-login.html'; }
+
+document.getElementById('today-date').textContent = new Date().toLocaleDateString('en-IN',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+
+let appointments = [];
+let currentModalId = null;
+
+function loadData() {
+  appointments = JSON.parse(localStorage.getItem('medicore_appointments')||'[]');
+  // Add demo data if empty
+  if(appointments.length === 0) {
+    const demo = [
+      {id:'APT-2026-DEMO1',doctor:'Dr. Rajesh Mehta',specialty:'Cardiology',fee:'₹800',date:'1 Apr 2026',time:'10:00 AM',patient:'Ravi Sharma',phone:'9876543210',email:'ravi@email.com',gender:'Male',blood:'O+',reason:'Chest pain',status:'Pending',createdAt:new Date().toISOString()},
+      {id:'APT-2026-DEMO2',doctor:'Dr. Sunita Patel',specialty:'Neurology',fee:'₹900',date:'1 Apr 2026',time:'11:30 AM',patient:'Priya Das',phone:'9812345678',email:'priya@email.com',gender:'Female',blood:'A+',reason:'Headaches',status:'Confirmed',createdAt:new Date().toISOString()},
+      {id:'APT-2026-DEMO3',doctor:'Dr. Priya Sharma',specialty:'Pediatrics',fee:'₹600',date:'2 Apr 2026',time:'9:00 AM',patient:'Baby Rohan',phone:'9898989898',email:'parent@email.com',gender:'Male',blood:'B+',reason:'Fever',status:'Completed',createdAt:new Date().toISOString()},
+    ];
+    localStorage.setItem('medicore_appointments', JSON.stringify(demo));
+    appointments = demo;
+  }
+  updateStats();
+  renderTable();
+}
+
+function updateStats() {
+  document.getElementById('stat-total').textContent = appointments.length;
+  document.getElementById('stat-pending').textContent = appointments.filter(a=>a.status==='Pending').length;
+  document.getElementById('stat-confirmed').textContent = appointments.filter(a=>a.status==='Confirmed').length;
+  const uniquePatients = [...new Set(appointments.map(a=>a.patient))].length;
+  document.getElementById('stat-patients').textContent = uniquePatients;
+}
+
+function renderTable() {
+  const search = document.getElementById('search-appt').value.toLowerCase();
+  const status = document.getElementById('filter-status').value;
+  let filtered = appointments.filter(a => {
+    const matchSearch = !search || a.patient.toLowerCase().includes(search) || a.doctor.toLowerCase().includes(search) || a.id.toLowerCase().includes(search);
+    const matchStatus = !status || a.status===status;
+    return matchSearch && matchStatus;
+  });
+  const tbody = document.getElementById('appt-tbody');
+  tbody.innerHTML = '';
+  document.getElementById('no-appts').style.display = filtered.length===0?'block':'none';
+  filtered.forEach(a => {
+    const statusColor = {Pending:'warning',Confirmed:'success',Completed:'info',Cancelled:'danger'}[a.status]||'info';
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><strong style="color:var(--navy)">${a.id}</strong></td>
+      <td>${a.patient}</td>
+      <td>${a.doctor}</td>
+      <td>${a.specialty}</td>
+      <td>${a.date}</td>
+      <td>${a.time}</td>
+      <td><span class="badge badge-${statusColor}">${a.status}</span></td>
+      <td style="display:flex;gap:0.4rem;flex-wrap:wrap">
+        <button class="action-btn action-view" onclick="viewAppt('${a.id}')">View</button>
+        ${a.status==='Pending'?`<button class="action-btn action-approve" onclick="updateStatus('${a.id}','Confirmed')">Approve</button>
+        <button class="action-btn action-reject" onclick="updateStatus('${a.id}','Cancelled')">Cancel</button>`:''}
+      </td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+function viewAppt(id) {
+  const a = appointments.find(x=>x.id===id);
+  if(!a) return;
+  currentModalId = id;
+  document.getElementById('modal-content').innerHTML = `
+    <div class="summary-row"><span>ID</span><span>${a.id}</span></div>
+    <div class="summary-row"><span>Patient</span><span>${a.patient}</span></div>
+    <div class="summary-row"><span>Doctor</span><span>${a.doctor}</span></div>
+    <div class="summary-row"><span>Specialty</span><span>${a.specialty}</span></div>
+    <div class="summary-row"><span>Date & Time</span><span>${a.date} at ${a.time}</span></div>
+    <div class="summary-row"><span>Phone</span><span>${a.phone||'—'}</span></div>
+    <div class="summary-row"><span>Gender</span><span>${a.gender||'—'}</span></div>
+    <div class="summary-row"><span>Blood Group</span><span>${a.blood||'—'}</span></div>
+    <div class="summary-row"><span>Reason</span><span>${a.reason||'—'}</span></div>
+    <div class="summary-row"><span>Status</span><span>${a.status}</span></div>
+    <div class="summary-row"><span>Fee</span><span>${a.fee}</span></div>
+  `;
+  document.getElementById('modal-approve').style.display = a.status==='Pending'?'block':'none';
+  document.getElementById('modal-reject').style.display = a.status==='Pending'||a.status==='Confirmed'?'block':'none';
+  document.getElementById('appt-modal').classList.add('open');
+}
+function closeModal(){ document.getElementById('appt-modal').classList.remove('open'); }
+function modalAction(status){ updateStatus(currentModalId, status); closeModal(); }
+function updateStatus(id, status) {
+  const idx = appointments.findIndex(a=>a.id===id);
+  if(idx>-1){ appointments[idx].status=status; localStorage.setItem('medicore_appointments',JSON.stringify(appointments)); updateStats(); renderTable(); }
+}
+function showSection(sec) {
+  ['doctors','staff','departments'].forEach(s=>{
+    const el=document.getElementById('section-'+s);
+    if(el) el.style.display='none';
+  });
+  const el=document.getElementById('section-'+sec);
+  if(el){ el.style.display='block'; el.scrollIntoView({behavior:'smooth',block:'start'}); }
+}
+document.getElementById('appt-modal').addEventListener('click', function(e){ if(e.target===this) closeModal(); });
+loadData();
+</script>
+</body>
+</html>

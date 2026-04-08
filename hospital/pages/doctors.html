@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Our Doctors — MediCore Hospital</title>
+  <link rel="stylesheet" href="../css/main.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    .doc-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.8rem; }
+    .doctor-full-card { background: white; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); border: 1px solid var(--light-gray); transition: all 0.3s; }
+    .doctor-full-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); }
+    .dfc-header { height: 180px; display: flex; align-items: center; justify-content: center; font-size: 3rem; font-family:'Cormorant Garamond',serif; font-weight:700; color:var(--gold); }
+    .dfc-body { padding: 1.5rem; }
+    .dfc-body h3 { color: var(--navy); margin-bottom: 0.2rem; }
+    .dfc-spec { color: var(--gold); font-size: 0.85rem; font-weight: 600; margin-bottom: 0.8rem; }
+    .dfc-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1rem; }
+    .dfc-tag { background: var(--off-white); color: var(--gray); padding: 0.2rem 0.7rem; border-radius: 50px; font-size: 0.72rem; }
+    .dfc-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 1.2rem; }
+    .dfc-meta-item { font-size: 0.78rem; color: var(--gray); }
+    .dfc-meta-item strong { display: block; color: var(--navy); font-size: 0.88rem; }
+    .filter-bar { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-bottom: 2.5rem; justify-content: center; }
+  </style>
+</head>
+<body>
+<nav class="navbar scrolled">
+  <div class="nav-inner">
+    <a href="../index.html" class="logo"><span class="logo-icon"><i class="fas fa-heartbeat"></i></span><span>Medi<strong>Core</strong></span></a>
+    <ul class="nav-links">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="appointment.html">Book Appointment</a></li>
+      <li><a href="doctors.html" class="active">Doctors</a></li>
+      <li><a href="services.html">Services</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="patient-login.html" class="btn-outline">Patient Login</a>
+    </div>
+  </div>
+</nav>
+<div class="page-header"><h1>Meet Our <em>Specialists</em></h1><p>Experienced, compassionate doctors dedicated to your health</p></div>
+<div class="section">
+  <div class="container">
+    <div class="filter-bar">
+      <button class="dept-btn active" onclick="filterDoc('all',this)">All Departments</button>
+      <button class="dept-btn" onclick="filterDoc('cardiology',this)">Cardiology</button>
+      <button class="dept-btn" onclick="filterDoc('neurology',this)">Neurology</button>
+      <button class="dept-btn" onclick="filterDoc('orthopedics',this)">Orthopedics</button>
+      <button class="dept-btn" onclick="filterDoc('pediatrics',this)">Pediatrics</button>
+      <button class="dept-btn" onclick="filterDoc('dermatology',this)">Dermatology</button>
+      <button class="dept-btn" onclick="filterDoc('gynecology',this)">Gynecology</button>
+      <button class="dept-btn" onclick="filterDoc('dentistry',this)">Dentistry</button>
+    </div>
+    <div class="doc-grid" id="doc-grid">
+      <div class="doctor-full-card" data-dept="cardiology"><div class="dfc-header" style="background:linear-gradient(135deg,var(--navy),#1a3a5c)">RM</div><div class="dfc-body"><h3>Dr. Rajesh Mehta</h3><div class="dfc-spec">Senior Cardiologist</div><div class="dfc-tags"><span class="dfc-tag">Heart Disease</span><span class="dfc-tag">Arrhythmia</span><span class="dfc-tag">Hypertension</span></div><div class="dfc-meta"><div class="dfc-meta-item"><strong>15 years</strong>Experience</div><div class="dfc-meta-item"><strong><i class="fas fa-star" style="color:#f59e0b"></i> 4.9</strong>Rating</div><div class="dfc-meta-item"><strong>₹800</strong>Consultation</div><div class="dfc-meta-item"><strong>Mon–Sat</strong>Availability</div></div><a href="appointment.html" class="btn-book">Book Appointment</a></div></div>
+      <div class="doctor-full-card" data-dept="neurology"><div class="dfc-header" style="background:linear-gradient(135deg,#1a2a5c,#2d4a8e)">SP</div><div class="dfc-body"><h3>Dr. Sunita Patel</h3><div class="dfc-spec">Senior Neurologist</div><div class="dfc-tags"><span class="dfc-tag">Migraines</span><span class="dfc-tag">Epilepsy</span><span class="dfc-tag">Stroke</span></div><div class="dfc-meta"><div class="dfc-meta-item"><strong>12 years</strong>Experience</div><div class="dfc-meta-item"><strong><i class="fas fa-star" style="color:#f59e0b"></i> 4.8</strong>Rating</div><div class="dfc-meta-item"><strong>₹900</strong>Consultation</div><div class="dfc-meta-item"><strong>Mon–Fri</strong>Availability</div></div><a href="appointment.html" class="btn-book">Book Appointment</a></div></div>
+      <div class="doctor-full-card" data-dept="orthopedics"><div class="dfc-header" style="background:linear-gradient(135deg,#2d3748,#4a5568)">AK</div><div class="dfc-body"><h3>Dr. Arjun Kumar</h3><div class="dfc-spec">Orthopedic Surgeon</div><div class="dfc-tags"><span class="dfc-tag">Knee Replacement</span><span class="dfc-tag">Spine</span><span class="dfc-tag">Sports Injury</span></div><div class="dfc-meta"><div class="dfc-meta-item"><strong>10 years</strong>Experience</div><div class="dfc-meta-item"><strong><i class="fas fa-star" style="color:#f59e0b"></i> 4.7</strong>Rating</div><div class="dfc-meta-item"><strong>₹750</strong>Consultation</div><div class="dfc-meta-item"><strong>Tue–Sun</strong>Availability</div></div><a href="appointment.html" class="btn-book">Book Appointment</a></div></div>
+      <div class="doctor-full-card" data-dept="pediatrics"><div class="dfc-header" style="background:linear-gradient(135deg,#27ae60,#1e8449)">PS</div><div class="dfc-body"><h3>Dr. Priya Sharma</h3><div class="dfc-spec">Pediatrician</div><div class="dfc-tags"><span class="dfc-tag">Child Health</span><span class="dfc-tag">Vaccination</span><span class="dfc-tag">Newborn Care</span></div><div class="dfc-meta"><div class="dfc-meta-item"><strong>8 years</strong>Experience</div><div class="dfc-meta-item"><strong><i class="fas fa-star" style="color:#f59e0b"></i> 4.9</strong>Rating</div><div class="dfc-meta-item"><strong>₹600</strong>Consultation</div><div class="dfc-meta-item"><strong>Mon–Sat</strong>Availability</div></div><a href="appointment.html" class="btn-book">Book Appointment</a></div></div>
+      <div class="doctor-full-card" data-dept="dermatology"><div class="dfc-header" style="background:linear-gradient(135deg,#e67e22,#ca6f1e)">KN</div><div class="dfc-body"><h3>Dr. Kavita Nair</h3><div class="dfc-spec">Dermatologist</div><div class="dfc-tags"><span class="dfc-tag">Acne</span><span class="dfc-tag">Psoriasis</span><span class="dfc-tag">Hair Loss</span></div><div class="dfc-meta"><div class="dfc-meta-item"><strong>9 years</strong>Experience</div><div class="dfc-meta-item"><strong><i class="fas fa-star" style="color:#f59e0b"></i> 4.6</strong>Rating</div><div class="dfc-meta-item"><strong>₹700</strong>Consultation</div><div class="dfc-meta-item"><strong>Wed–Mon</strong>Availability</div></div><a href="appointment.html" class="btn-book">Book Appointment</a></div></div>
+      <div class="doctor-full-card" data-dept="gynecology"><div class="dfc-header" style="background:linear-gradient(135deg,#e91e8c,#ad1457)">AD</div><div class="dfc-body"><h3>Dr. Anjali Desai</h3><div class="dfc-spec">Gynecologist & Obstetrician</div><div class="dfc-tags"><span class="dfc-tag">Prenatal</span><span class="dfc-tag">PCOS</span><span class="dfc-tag">Fertility</span></div><div class="dfc-meta"><div class="dfc-meta-item"><strong>14 years</strong>Experience</div><div class="dfc-meta-item"><strong><i class="fas fa-star" style="color:#f59e0b"></i> 4.8</strong>Rating</div><div class="dfc-meta-item"><strong>₹850</strong>Consultation</div><div class="dfc-meta-item"><strong>Mon–Sat</strong>Availability</div></div><a href="appointment.html" class="btn-book">Book Appointment</a></div></div>
+    </div>
+  </div>
+</div>
+<footer class="footer">
+  <div class="footer-inner" style="grid-template-columns:1fr 1fr 1fr">
+    <div class="footer-brand"><a href="../index.html" class="logo"><span class="logo-icon"><i class="fas fa-heartbeat"></i></span><span>Medi<strong>Core</strong></span></a><p style="margin-top:0.8rem">World-class healthcare specialists.</p></div>
+    <div class="footer-links"><h4>Navigation</h4><ul><li><a href="../index.html">Home</a></li><li><a href="appointment.html">Book Appointment</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+    <div class="footer-contact"><h4>Emergency</h4><p><i class="fas fa-phone"></i> +91 20 1234 5678</p><p><i class="fas fa-clock"></i> 24/7 Emergency Services</p></div>
+  </div>
+  <div class="footer-bottom"><p>© 2026 MediCore Hospital</p></div>
+</footer>
+<style>.dept-btn{padding:.4rem 1rem;border-radius:50px;border:1.5px solid var(--light-gray);font-size:.82rem;cursor:pointer;background:white;transition:all .2s}.dept-btn:hover,.dept-btn.active{border-color:var(--navy);background:var(--navy);color:white}</style>
+<script>
+function filterDoc(dept,btn){
+  document.querySelectorAll('.dept-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.doctor-full-card').forEach(d=>{d.style.display=(dept==='all'||d.dataset.dept===dept)?'block':'none';});
+}
+</script>
+</body>
+</html>
